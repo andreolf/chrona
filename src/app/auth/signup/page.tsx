@@ -65,15 +65,21 @@ export default function SignupPage() {
     // Wait for session to be established
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Create or get organization
-    let orgId: string;
+    // v0: Single organization - all users join "Chrona Workspace"
+    // Get or create the default organization
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    let { data: org } = await (supabase as any)
+      .from('organizations')
+      .select('id')
+      .eq('name', 'Chrona Workspace')
+      .single();
 
-    if (selectedRole === 'admin') {
-      // Admin creates a new organization
+    // If no default org exists, create it (first user)
+    if (!org) {
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: org, error: orgError } = await (supabase as any)
+      const { data: newOrg, error: orgError } = await (supabase as any)
         .from('organizations')
-        .insert({ name: `${data.fullName}'s Workspace` })
+        .insert({ name: 'Chrona Workspace' })
         .select()
         .single();
 
@@ -83,23 +89,10 @@ export default function SignupPage() {
         setIsLoading(false);
         return;
       }
-      orgId = org.id;
-    } else {
-      // Freelancer joins existing organization
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { data: org } = await (supabase as any)
-        .from('organizations')
-        .select('id')
-        .limit(1)
-        .single();
-
-      if (!org) {
-        setError('No organization found. A client must sign up first.');
-        setIsLoading(false);
-        return;
-      }
-      orgId = org.id;
+      org = newOrg;
     }
+
+    const orgId = org.id;
 
     // Create profile with selected role
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
