@@ -65,7 +65,7 @@ export default function SignupPage() {
 
     // Create or get organization
     let orgId: string;
-    
+
     if (selectedRole === 'admin') {
       // Admin creates a new organization
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -124,11 +124,11 @@ export default function SignupPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4 py-8">
-      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
+      <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 pointer-events-none" />
 
       {/* Back to home link */}
-      <Link 
-        href="/" 
+      <Link
+        href="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors z-10"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -177,8 +177,8 @@ export default function SignupPage() {
                 >
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center mb-2',
-                    selectedRole === 'freelancer' 
-                      ? 'bg-indigo-500/20' 
+                    selectedRole === 'freelancer'
+                      ? 'bg-indigo-500/20'
                       : 'bg-slate-700/50'
                   )}>
                     <Briefcase className={cn(
@@ -209,8 +209,8 @@ export default function SignupPage() {
                 >
                   <div className={cn(
                     'w-10 h-10 rounded-lg flex items-center justify-center mb-2',
-                    selectedRole === 'admin' 
-                      ? 'bg-violet-500/20' 
+                    selectedRole === 'admin'
+                      ? 'bg-violet-500/20'
                       : 'bg-slate-700/50'
                   )}>
                     <Users className={cn(
