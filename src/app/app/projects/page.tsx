@@ -99,14 +99,30 @@ export default function ProjectsPage() {
       .eq('id', user.id)
       .single() as { data: { role: string } | null };
 
-    setIsAdmin(profile?.role === 'admin');
+    const userIsAdmin = profile?.role === 'admin';
+    setIsAdmin(userIsAdmin);
 
-    const { data } = await supabase
-      .from('projects')
-      .select('*')
-      .order('name');
+    if (userIsAdmin) {
+      // Admins see all projects
+      const { data } = await supabase
+        .from('projects')
+        .select('*')
+        .order('name');
+      setProjects(data || []);
+    } else {
+      // Freelancers only see assigned projects
+      const { data: memberProjects } = await supabase
+        .from('project_members')
+        .select('project:projects(*)')
+        .eq('user_id', user.id);
+      
+      const assignedProjects = (memberProjects || [])
+        .map((mp: { project: Project }) => mp.project)
+        .filter((p): p is Project => p !== null);
+      
+      setProjects(assignedProjects);
+    }
 
-    setProjects(data || []);
     setIsLoading(false);
   }, []);
 
@@ -417,8 +433,8 @@ export default function ProjectsPage() {
   return (
     <>
       <PageHeader
-        title="Projects"
-        description="Manage projects and track time against them"
+        title={isAdmin ? "Projects" : "My Projects"}
+        description={isAdmin ? "Manage projects and assign team members" : "Projects you're assigned to"}
         actions={
           isAdmin && (
             <Button
