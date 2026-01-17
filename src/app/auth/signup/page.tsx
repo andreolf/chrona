@@ -32,7 +32,7 @@ export default function SignupPage() {
     setError(null);
 
     const supabase = createClient();
-    
+
     // Sign up the user
     const { data: authData, error: authError } = await supabase.auth.signUp({
       email: data.email,
@@ -92,7 +92,7 @@ export default function SignupPage() {
         .select('id')
         .limit(1)
         .single();
-      
+
       orgId = org?.id || '';
     }
 
@@ -122,7 +122,7 @@ export default function SignupPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
-      
+
       <Card className="w-full max-w-md relative bg-slate-900/90 border-slate-800 shadow-2xl shadow-indigo-500/10">
         <CardHeader className="text-center space-y-4">
           <Link href="/" className="flex justify-center">
@@ -224,8 +224,8 @@ export default function SignupPage() {
           <div className="mt-6 text-center">
             <p className="text-slate-400 text-sm">
               Already have an account?{' '}
-              <Link 
-                href="/auth/login" 
+              <Link
+                href="/auth/login"
                 className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
               >
                 Sign in

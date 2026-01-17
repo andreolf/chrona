@@ -30,7 +30,7 @@ export default async function AppLayout({
     role: 'freelancer',
     full_name: user.email?.split('@')[0] || 'User',
     email: user.email || '',
-    status: 'active',
+    is_active: true,
     default_hourly_rate: null,
     preferred_currency: 'USD',
     created_at: new Date().toISOString(),
