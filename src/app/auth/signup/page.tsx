@@ -12,12 +12,16 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Clock, AlertCircle, Loader2 } from 'lucide-react';
+import { Clock, AlertCircle, Loader2, Briefcase, Users, ArrowLeft } from 'lucide-react';
+import { cn } from '@/lib/utils';
+
+type UserRole = 'freelancer' | 'admin';
 
 export default function SignupPage() {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedRole, setSelectedRole] = useState<UserRole>('freelancer');
 
   const {
     register,
@@ -59,22 +63,15 @@ export default function SignupPage() {
     // Wait for session to be established
     await new Promise(resolve => setTimeout(resolve, 1000));
 
-    // Check if this is the first user (will become admin)
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const { count } = await (supabase as any)
-      .from('profiles')
-      .select('*', { count: 'exact', head: true });
-
-    const isFirstUser = !count || count === 0;
-    const role = isFirstUser ? 'admin' : 'freelancer';
-
     // Create or get organization
     let orgId: string;
-    if (isFirstUser) {
+    
+    if (selectedRole === 'admin') {
+      // Admin creates a new organization
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: org, error: orgError } = await (supabase as any)
         .from('organizations')
-        .insert({ name: 'Chrona Workspace' })
+        .insert({ name: `${data.fullName}'s Workspace` })
         .select()
         .single();
 
@@ -86,6 +83,7 @@ export default function SignupPage() {
       }
       orgId = org.id;
     } else {
+      // Freelancer joins existing organization
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: org } = await (supabase as any)
         .from('organizations')
@@ -93,10 +91,15 @@ export default function SignupPage() {
         .limit(1)
         .single();
 
-      orgId = org?.id || '';
+      if (!org) {
+        setError('No organization found. A client must sign up first.');
+        setIsLoading(false);
+        return;
+      }
+      orgId = org.id;
     }
 
-    // Create profile
+    // Create profile with selected role
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: profileError } = await (supabase as any)
       .from('profiles')
@@ -105,7 +108,7 @@ export default function SignupPage() {
         org_id: orgId,
         email: data.email,
         full_name: data.fullName,
-        role: role,
+        role: selectedRole,
       });
 
     if (profileError) {
@@ -120,8 +123,17 @@ export default function SignupPage() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4">
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4 py-8">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40" />
+
+      {/* Back to home link */}
+      <Link 
+        href="/" 
+        className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors z-10"
+      >
+        <ArrowLeft className="w-4 h-4" />
+        <span className="text-sm">Back to home</span>
+      </Link>
 
       <Card className="w-full max-w-md relative bg-slate-900/90 border-slate-800 shadow-2xl shadow-indigo-500/10">
         <CardHeader className="text-center space-y-4">
@@ -148,6 +160,76 @@ export default function SignupPage() {
                 <AlertDescription>{error}</AlertDescription>
               </Alert>
             )}
+
+            {/* Role Selection */}
+            <div className="space-y-3">
+              <Label className="text-slate-300">I am a...</Label>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('freelancer')}
+                  className={cn(
+                    'p-4 rounded-xl border-2 transition-all text-left',
+                    selectedRole === 'freelancer'
+                      ? 'border-indigo-500 bg-indigo-500/10'
+                      : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
+                  )}
+                >
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center mb-2',
+                    selectedRole === 'freelancer' 
+                      ? 'bg-indigo-500/20' 
+                      : 'bg-slate-700/50'
+                  )}>
+                    <Briefcase className={cn(
+                      'w-5 h-5',
+                      selectedRole === 'freelancer' ? 'text-indigo-400' : 'text-slate-400'
+                    )} />
+                  </div>
+                  <p className={cn(
+                    'font-medium',
+                    selectedRole === 'freelancer' ? 'text-white' : 'text-slate-300'
+                  )}>
+                    Freelancer
+                  </p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    I track time for clients
+                  </p>
+                </button>
+
+                <button
+                  type="button"
+                  onClick={() => setSelectedRole('admin')}
+                  className={cn(
+                    'p-4 rounded-xl border-2 transition-all text-left',
+                    selectedRole === 'admin'
+                      ? 'border-violet-500 bg-violet-500/10'
+                      : 'border-slate-700 bg-slate-800/30 hover:border-slate-600'
+                  )}
+                >
+                  <div className={cn(
+                    'w-10 h-10 rounded-lg flex items-center justify-center mb-2',
+                    selectedRole === 'admin' 
+                      ? 'bg-violet-500/20' 
+                      : 'bg-slate-700/50'
+                  )}>
+                    <Users className={cn(
+                      'w-5 h-5',
+                      selectedRole === 'admin' ? 'text-violet-400' : 'text-slate-400'
+                    )} />
+                  </div>
+                  <p className={cn(
+                    'font-medium',
+                    selectedRole === 'admin' ? 'text-white' : 'text-slate-300'
+                  )}>
+                    Client
+                  </p>
+                  <p className="text-xs text-slate-500 mt-1">
+                    I hire freelancers
+                  </p>
+                </button>
+              </div>
+            </div>
 
             <div className="space-y-2">
               <Label htmlFor="fullName" className="text-slate-300">Full Name</Label>
@@ -208,7 +290,12 @@ export default function SignupPage() {
             <Button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-medium py-5 shadow-lg shadow-indigo-500/25"
+              className={cn(
+                'w-full text-white font-medium py-5 shadow-lg',
+                selectedRole === 'admin'
+                  ? 'bg-gradient-to-r from-violet-600 to-purple-600 hover:from-violet-500 hover:to-purple-500 shadow-violet-500/25'
+                  : 'bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 shadow-indigo-500/25'
+              )}
             >
               {isLoading ? (
                 <>
@@ -216,7 +303,7 @@ export default function SignupPage() {
                   Creating account...
                 </>
               ) : (
-                'Create account'
+                `Create ${selectedRole === 'admin' ? 'Client' : 'Freelancer'} Account`
               )}
             </Button>
           </form>
