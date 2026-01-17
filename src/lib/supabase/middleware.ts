@@ -55,10 +55,11 @@ export async function updateSession(request: NextRequest) {
     }
   }
 
-  // Redirect root to app or auth
-  if (request.nextUrl.pathname === '/') {
+  // If logged in and visiting root, redirect to dashboard
+  // Otherwise, allow landing page to render
+  if (request.nextUrl.pathname === '/' && user) {
     const url = request.nextUrl.clone();
-    url.pathname = user ? '/app/dashboard' : '/auth/login';
+    url.pathname = '/app/dashboard';
     return NextResponse.redirect(url);
   }
 
