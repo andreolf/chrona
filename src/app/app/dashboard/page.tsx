@@ -423,7 +423,6 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
 }
 
 async function DashboardContent() {
-  const profile = await getProfile();
   const { data: stats, error } = await getDashboardStats();
 
   if (error || !stats) {
