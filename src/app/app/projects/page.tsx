@@ -316,9 +316,11 @@ export default function ProjectsPage() {
         {items.map((project) => (
           <Card
             key={project.id}
-            className={`bg-slate-800/30 border-slate-800 hover:bg-slate-800/50 transition-colors ${!isAdmin ? 'cursor-pointer' : ''}`}
+            className="bg-slate-800/30 border-slate-800 hover:bg-slate-800/50 transition-colors cursor-pointer"
             onClick={() => {
-              if (!isAdmin) {
+              if (isAdmin) {
+                handleOpenMemberManagement(project);
+              } else {
                 router.push(`/app/time?project=${project.id}`);
               }
             }}
@@ -348,9 +350,9 @@ export default function ProjectsPage() {
                     >
                       {project.status}
                     </Badge>
-                    {!isAdmin && (
-                      <span className="text-xs text-indigo-400">Click to log time →</span>
-                    )}
+                    <span className="text-xs text-indigo-400">
+                      {isAdmin ? 'Click to manage team →' : 'Click to log time →'}
+                    </span>
                   </div>
                 </div>
 
@@ -361,6 +363,7 @@ export default function ProjectsPage() {
                         variant="ghost"
                         size="icon"
                         className="h-8 w-8 text-slate-400 hover:text-white"
+                        onClick={(e) => e.stopPropagation()}
                       >
                         <MoreHorizontal className="h-4 w-4" />
                       </Button>
