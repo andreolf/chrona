@@ -12,7 +12,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Clock, AlertCircle, Loader2, Briefcase, Users, ArrowLeft } from 'lucide-react';
+import { Clock, AlertCircle, Loader2, Briefcase, Users, ArrowLeft, Eye, EyeOff } from 'lucide-react';
 import { cn } from '@/lib/utils';
 
 type UserRole = 'freelancer' | 'admin';
@@ -22,6 +22,8 @@ export default function SignupPage() {
   const [error, setError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [selectedRole, setSelectedRole] = useState<UserRole>('freelancer');
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const {
     register,
@@ -261,13 +263,22 @@ export default function SignupPage() {
 
             <div className="space-y-2">
               <Label htmlFor="password" className="text-slate-300">Password</Label>
-              <Input
-                id="password"
-                type="password"
-                placeholder="••••••••"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20"
-                {...register('password')}
-              />
+              <div className="relative">
+                <Input
+                  id="password"
+                  type={showPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20 pr-10"
+                  {...register('password')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                >
+                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {errors.password && (
                 <p className="text-sm text-red-400">{errors.password.message}</p>
               )}
@@ -275,13 +286,22 @@ export default function SignupPage() {
 
             <div className="space-y-2">
               <Label htmlFor="confirmPassword" className="text-slate-300">Confirm Password</Label>
-              <Input
-                id="confirmPassword"
-                type="password"
-                placeholder="••••••••"
-                className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20"
-                {...register('confirmPassword')}
-              />
+              <div className="relative">
+                <Input
+                  id="confirmPassword"
+                  type={showConfirmPassword ? 'text' : 'password'}
+                  placeholder="••••••••"
+                  className="bg-slate-800/50 border-slate-700 text-white placeholder:text-slate-500 focus:border-indigo-500 focus:ring-indigo-500/20 pr-10"
+                  {...register('confirmPassword')}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white transition-colors"
+                >
+                  {showConfirmPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                </button>
+              </div>
               {errors.confirmPassword && (
                 <p className="text-sm text-red-400">{errors.confirmPassword.message}</p>
               )}

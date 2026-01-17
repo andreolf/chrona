@@ -68,9 +68,9 @@ async function AdminDashboard({ stats }: { stats: Awaited<ReturnType<typeof getD
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Team Hours This Week"
-          value={`${stats.totalHours}h`}
+          value={stats.totalHours > 0 ? `${stats.totalHours}h` : '—'}
           icon={Clock}
-          description="Total logged by all members"
+          description={stats.totalHours > 0 ? 'Total logged by all members' : 'No hours logged yet'}
         />
         <StatCard
           title="Pending Review"
@@ -271,9 +271,9 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <StatCard
           title="Hours This Week"
-          value={`${stats.totalHours}h`}
+          value={stats.totalHours > 0 ? `${stats.totalHours}h` : '—'}
           icon={Clock}
-          description="Your logged hours"
+          description={stats.totalHours > 0 ? 'Your logged hours' : 'Start logging time'}
         />
         <StatCard
           title="Current Timesheet"

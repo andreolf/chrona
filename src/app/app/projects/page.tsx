@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Project, Profile } from '@/lib/supabase/types';
 import { 
@@ -70,6 +71,7 @@ interface ProjectMemberWithUser {
 
 export default function ProjectsPage() {
   const { toast } = useToast();
+  const router = useRouter();
   const [projects, setProjects] = useState<Project[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isAdmin, setIsAdmin] = useState(false);
@@ -314,7 +316,12 @@ export default function ProjectsPage() {
         {items.map((project) => (
           <Card
             key={project.id}
-            className="bg-slate-800/30 border-slate-800 hover:bg-slate-800/50 transition-colors"
+            className={`bg-slate-800/30 border-slate-800 hover:bg-slate-800/50 transition-colors ${!isAdmin ? 'cursor-pointer' : ''}`}
+            onClick={() => {
+              if (!isAdmin) {
+                router.push(`/app/time?project=${project.id}`);
+              }
+            }}
           >
             <CardContent className="p-4">
               <div className="flex items-start justify-between gap-3">
@@ -341,6 +348,9 @@ export default function ProjectsPage() {
                     >
                       {project.status}
                     </Badge>
+                    {!isAdmin && (
+                      <span className="text-xs text-indigo-400">Click to log time →</span>
+                    )}
                   </div>
                 </div>
 

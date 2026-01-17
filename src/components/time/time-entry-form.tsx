@@ -167,14 +167,18 @@ export function TimeEntryForm({
                     <FormLabel className="text-slate-300">Hours</FormLabel>
                     <FormControl>
                       <Input
-                        type="number"
-                        step="0.25"
-                        min="0.01"
-                        max="24"
-                        placeholder="0.00"
+                        type="text"
+                        inputMode="decimal"
+                        placeholder="e.g. 2 or 1.5"
                         className="bg-slate-800/50 border-slate-700 text-white h-9"
-                        {...field}
-                        onChange={(e) => field.onChange(parseFloat(e.target.value) || 0)}
+                        value={field.value || ''}
+                        onChange={(e) => {
+                          const val = e.target.value;
+                          // Allow empty, numbers, and decimals
+                          if (val === '' || /^\d*\.?\d*$/.test(val)) {
+                            field.onChange(val === '' ? 0 : parseFloat(val) || 0);
+                          }
+                        }}
                       />
                     </FormControl>
                     <FormMessage className="text-red-400" />
@@ -189,22 +193,28 @@ export function TimeEntryForm({
               render={({ field }) => (
                 <FormItem>
                   <FormLabel className="text-slate-300">Project</FormLabel>
-                  <Select onValueChange={field.onChange} defaultValue={field.value}>
+                  <Select onValueChange={field.onChange} value={field.value}>
                     <FormControl>
                       <SelectTrigger className="bg-slate-800/50 border-slate-700 text-white">
                         <SelectValue placeholder="Select a project" />
                       </SelectTrigger>
                     </FormControl>
-                    <SelectContent className="bg-slate-900 border-slate-800">
-                      {projects.map((project) => (
-                        <SelectItem
-                          key={project.id}
-                          value={project.id}
-                          className="text-white focus:bg-slate-800 focus:text-white"
-                        >
-                          {project.name}
-                        </SelectItem>
-                      ))}
+                    <SelectContent className="bg-slate-900 border-slate-800 z-50">
+                      {projects.length === 0 ? (
+                        <div className="p-3 text-center text-slate-400 text-sm">
+                          No projects assigned
+                        </div>
+                      ) : (
+                        projects.map((project) => (
+                          <SelectItem
+                            key={project.id}
+                            value={project.id}
+                            className="text-white focus:bg-slate-800 focus:text-white cursor-pointer"
+                          >
+                            {project.name}
+                          </SelectItem>
+                        ))
+                      )}
                     </SelectContent>
                   </Select>
                   <FormMessage className="text-red-400" />
