@@ -4,13 +4,13 @@ import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { createClient } from '@/lib/supabase/client';
 import { Project, Profile } from '@/lib/supabase/types';
-import { 
-  createProject, 
-  updateProject, 
-  archiveProject, 
+import {
+  createProject,
+  updateProject,
+  archiveProject,
   restoreProject,
   addProjectMember,
-  removeProjectMember 
+  removeProjectMember
 } from '@/lib/actions/projects';
 import { PageHeader } from '@/components/app/page-header';
 import { EmptyState } from '@/components/app/empty-state';
@@ -80,7 +80,7 @@ export default function ProjectsPage() {
   const [archivingProject, setArchivingProject] = useState<Project | null>(null);
   const [formData, setFormData] = useState({ name: '', description: '' });
   const [isSaving, setIsSaving] = useState(false);
-  
+
   // Member management state
   const [managingProject, setManagingProject] = useState<Project | null>(null);
   const [projectMembers, setProjectMembers] = useState<ProjectMemberWithUser[]>([]);
@@ -117,20 +117,20 @@ export default function ProjectsPage() {
   const fetchProjectMembers = async (projectId: string) => {
     setLoadingMembers(true);
     const supabase = createClient();
-    
+
     // Fetch project members
     const { data: members } = await supabase
       .from('project_members')
       .select('*, user:profiles(*)')
       .eq('project_id', projectId) as { data: ProjectMemberWithUser[] | null };
-    
+
     // Fetch all freelancers for adding
     const { data: users } = await supabase
       .from('profiles')
       .select('*')
       .eq('role', 'freelancer')
       .eq('is_active', true);
-    
+
     setProjectMembers(members || []);
     setAllUsers(users || []);
     setLoadingMembers(false);
@@ -143,9 +143,9 @@ export default function ProjectsPage() {
 
   const handleAddMember = async (userId: string) => {
     if (!managingProject) return;
-    
+
     const result = await addProjectMember(managingProject.id, userId);
-    
+
     if (result.error) {
       toast({
         variant: 'destructive',
@@ -154,20 +154,20 @@ export default function ProjectsPage() {
       });
       return;
     }
-    
+
     toast({
       title: 'Member added',
       description: 'Freelancer has been assigned to the project.',
     });
-    
+
     await fetchProjectMembers(managingProject.id);
   };
 
   const handleRemoveMember = async (userId: string) => {
     if (!managingProject) return;
-    
+
     const result = await removeProjectMember(managingProject.id, userId);
-    
+
     if (result.error) {
       toast({
         variant: 'destructive',
@@ -176,12 +176,12 @@ export default function ProjectsPage() {
       });
       return;
     }
-    
+
     toast({
       title: 'Member removed',
       description: 'Freelancer has been removed from the project.',
     });
-    
+
     await fetchProjectMembers(managingProject.id);
   };
 
@@ -283,7 +283,7 @@ export default function ProjectsPage() {
 
   const activeProjects = projects.filter((p) => p.status === 'active');
   const archivedProjects = projects.filter((p) => p.status === 'archived');
-  
+
   // Get users not already assigned to the project
   const availableUsers = allUsers.filter(
     (user) => !projectMembers.some((pm) => pm.user_id === user.id)
@@ -531,7 +531,7 @@ export default function ProjectsPage() {
               Assign freelancers to <span className="text-white font-medium">{managingProject?.name}</span>
             </DialogDescription>
           </DialogHeader>
-          
+
           {loadingMembers ? (
             <div className="flex justify-center py-8">
               <Loader2 className="w-6 h-6 animate-spin text-indigo-400" />
@@ -598,9 +598,8 @@ export default function ProjectsPage() {
                     </p>
                   </div>
                 ) : (
-                  <ScrollArea className="max-h-48">
-                    <div className="space-y-2">
-                      {availableUsers.map((user) => (
+                  <div className="max-h-64 overflow-y-auto space-y-2 pr-2">
+                    {availableUsers.map((user) => (
                         <div
                           key={user.id}
                           className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
@@ -631,8 +630,7 @@ export default function ProjectsPage() {
                           </Button>
                         </div>
                       ))}
-                    </div>
-                  </ScrollArea>
+                  </div>
                 )}
               </div>
             </div>

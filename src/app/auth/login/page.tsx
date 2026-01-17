@@ -51,10 +51,10 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-950 via-slate-900 to-indigo-950 px-4">
       <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjAiIGhlaWdodD0iNjAiIHZpZXdCb3g9IjAgMCA2MCA2MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZyBmaWxsPSJub25lIiBmaWxsLXJ1bGU9ImV2ZW5vZGQiPjxnIGZpbGw9IiMyMDIwMjAiIGZpbGwtb3BhY2l0eT0iMC4wNSI+PGNpcmNsZSBjeD0iMiIgY3k9IjIiIHI9IjIiLz48L2c+PC9nPjwvc3ZnPg==')] opacity-40 pointer-events-none" />
-      
+
       {/* Back to home link */}
-      <Link 
-        href="/" 
+      <Link
+        href="/"
         className="absolute top-6 left-6 flex items-center gap-2 text-slate-400 hover:text-white transition-colors z-10"
       >
         <ArrowLeft className="w-4 h-4" />
@@ -143,8 +143,8 @@ export default function LoginPage() {
           <div className="mt-6 text-center">
             <p className="text-slate-400 text-sm">
               Don&apos;t have an account?{' '}
-              <Link 
-                href="/auth/signup" 
+              <Link
+                href="/auth/signup"
                 className="text-indigo-400 hover:text-indigo-300 font-medium transition-colors"
               >
                 Sign up

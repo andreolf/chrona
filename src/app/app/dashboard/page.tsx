@@ -100,7 +100,7 @@ async function AdminDashboard({ stats }: { stats: Awaited<ReturnType<typeof getD
               <FileText className="w-5 h-5 text-amber-400" />
               Pending Reviews
             </CardTitle>
-            <Link 
+            <Link
               href="/app/timesheets"
               className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
             >
@@ -148,7 +148,7 @@ async function AdminDashboard({ stats }: { stats: Awaited<ReturnType<typeof getD
               <Users className="w-5 h-5 text-indigo-400" />
               Team This Week
             </CardTitle>
-            <Link 
+            <Link
               href="/app/users"
               className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
             >
@@ -278,8 +278,8 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
         <StatCard
           title="Current Timesheet"
           value={
-            <StatusBadge 
-              status={stats.currentTimesheetStatus as 'draft' | 'submitted' | 'changes_requested' | 'approved'} 
+            <StatusBadge
+              status={stats.currentTimesheetStatus as 'draft' | 'submitted' | 'changes_requested' | 'approved'}
             />
           }
           icon={FileText}
@@ -312,7 +312,7 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
               <Briefcase className="w-5 h-5 text-indigo-400" />
               My Projects
             </CardTitle>
-            <Link 
+            <Link
               href="/app/projects"
               className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
             >
@@ -362,7 +362,7 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
               <FileText className="w-5 h-5 text-violet-400" />
               My Timesheets
             </CardTitle>
-            <Link 
+            <Link
               href="/app/timesheets"
               className="text-sm text-indigo-400 hover:text-indigo-300 transition-colors"
             >
@@ -411,7 +411,7 @@ async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof
             <div>
               <h3 className="text-white font-semibold mb-1">Weekly Workflow</h3>
               <p className="text-slate-400 text-sm leading-relaxed">
-                Log your time entries throughout the week, then submit your timesheet for review. 
+                Log your time entries throughout the week, then submit your timesheet for review.
                 Your admin will approve or request changes. Keep deliverable links handy for faster approvals!
               </p>
             </div>
@@ -443,13 +443,13 @@ async function DashboardContent() {
 export default async function DashboardPage() {
   const profile = await getProfile();
   const isAdmin = profile?.role === 'admin';
-  
+
   return (
     <>
       <PageHeader
         title={`Welcome back, ${profile?.full_name?.split(' ')[0] || 'User'}`}
-        description={isAdmin 
-          ? "Manage your team and review their work" 
+        description={isAdmin
+          ? "Manage your team and review their work"
           : "Track your time and manage deliverables"
         }
       />
