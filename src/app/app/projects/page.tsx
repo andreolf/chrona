@@ -600,36 +600,36 @@ export default function ProjectsPage() {
                 ) : (
                   <div className="max-h-64 overflow-y-auto space-y-2 pr-2">
                     {availableUsers.map((user) => (
-                        <div
-                          key={user.id}
-                          className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
-                        >
-                          <div className="flex items-center gap-3">
-                            <Avatar className="h-8 w-8 bg-slate-700">
-                              <AvatarFallback className="text-slate-300 text-xs font-medium bg-transparent">
-                                {getInitials(user.full_name)}
-                              </AvatarFallback>
-                            </Avatar>
-                            <div>
-                              <p className="text-slate-200 text-sm font-medium">
-                                {user.full_name}
-                              </p>
-                              <p className="text-slate-500 text-xs">
-                                {user.email}
-                              </p>
-                            </div>
+                      <div
+                        key={user.id}
+                        className="flex items-center justify-between p-3 bg-slate-800/30 rounded-lg border border-slate-800 hover:border-slate-700 transition-colors"
+                      >
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-8 w-8 bg-slate-700">
+                            <AvatarFallback className="text-slate-300 text-xs font-medium bg-transparent">
+                              {getInitials(user.full_name)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <p className="text-slate-200 text-sm font-medium">
+                              {user.full_name}
+                            </p>
+                            <p className="text-slate-500 text-xs">
+                              {user.email}
+                            </p>
                           </div>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => handleAddMember(user.id)}
-                            className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/30"
-                          >
-                            <UserPlus className="h-4 w-4 mr-1" />
-                            Add
-                          </Button>
                         </div>
-                      ))}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => handleAddMember(user.id)}
+                          className="text-indigo-400 hover:text-indigo-300 hover:bg-indigo-950/30"
+                        >
+                          <UserPlus className="h-4 w-4 mr-1" />
+                          Add
+                        </Button>
+                      </div>
+                    ))}
                   </div>
                 )}
               </div>
