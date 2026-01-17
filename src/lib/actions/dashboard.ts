@@ -93,7 +93,7 @@ export async function getDashboardStats() {
 
   // Get team size and team members (for admin)
   let teamSize = 1;
-  let teamMembers: { id: string; full_name: string; email: string; role: string; hours_this_week: number }[] = [];
+  const teamMembers: { id: string; full_name: string; email: string; role: string; hours_this_week: number }[] = [];
   
   if (isAdmin) {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any

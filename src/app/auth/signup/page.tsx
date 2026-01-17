@@ -60,6 +60,7 @@ export default function SignupPage() {
     await new Promise(resolve => setTimeout(resolve, 1000));
 
     // Check if this is the first user (will become admin)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { count } = await (supabase as any)
       .from('profiles')
       .select('*', { count: 'exact', head: true });
@@ -70,6 +71,7 @@ export default function SignupPage() {
     // Create or get organization
     let orgId: string;
     if (isFirstUser) {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: org, error: orgError } = await (supabase as any)
         .from('organizations')
         .insert({ name: 'Chrona Workspace' })
@@ -84,6 +86,7 @@ export default function SignupPage() {
       }
       orgId = org.id;
     } else {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       const { data: org } = await (supabase as any)
         .from('organizations')
         .select('id')
@@ -94,6 +97,7 @@ export default function SignupPage() {
     }
 
     // Create profile
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const { error: profileError } = await (supabase as any)
       .from('profiles')
       .insert({

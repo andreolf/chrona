@@ -23,7 +23,7 @@ import {
 } from 'lucide-react';
 import Link from 'next/link';
 
-async function AdminDashboard({ stats, profile }: { stats: Awaited<ReturnType<typeof getDashboardStats>>['data']; profile: { full_name: string } | null }) {
+async function AdminDashboard({ stats }: { stats: Awaited<ReturnType<typeof getDashboardStats>>['data'] }) {
   if (!stats) return null;
 
   const getInitials = (name: string) => {
@@ -237,7 +237,7 @@ async function AdminDashboard({ stats, profile }: { stats: Awaited<ReturnType<ty
   );
 }
 
-async function FreelancerDashboard({ stats, profile }: { stats: Awaited<ReturnType<typeof getDashboardStats>>['data']; profile: { full_name: string } | null }) {
+async function FreelancerDashboard({ stats }: { stats: Awaited<ReturnType<typeof getDashboardStats>>['data'] }) {
   if (!stats) return null;
 
   return (
@@ -435,10 +435,10 @@ async function DashboardContent() {
   }
 
   if (stats.isAdmin) {
-    return <AdminDashboard stats={stats} profile={profile} />;
+    return <AdminDashboard stats={stats} />;
   }
 
-  return <FreelancerDashboard stats={stats} profile={profile} />;
+  return <FreelancerDashboard stats={stats} />;
 }
 
 export default async function DashboardPage() {
