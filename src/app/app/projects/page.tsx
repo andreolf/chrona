@@ -586,11 +586,18 @@ export default function ProjectsPage() {
               </div>
 
               {/* Add Members */}
-              {availableUsers.length > 0 && (
-                <div>
-                  <h4 className="text-sm font-medium text-slate-300 mb-3">
-                    Add Freelancers
-                  </h4>
+              <div>
+                <h4 className="text-sm font-medium text-slate-300 mb-3">
+                  Add Freelancers ({availableUsers.length} available)
+                </h4>
+                {availableUsers.length === 0 ? (
+                  <div className="text-center py-4 bg-slate-800/30 rounded-lg border border-dashed border-slate-700">
+                    <p className="text-slate-500 text-sm">No freelancers available</p>
+                    <p className="text-slate-600 text-xs mt-1">
+                      Freelancers need to sign up with the &quot;Freelancer&quot; role
+                    </p>
+                  </div>
+                ) : (
                   <ScrollArea className="max-h-48">
                     <div className="space-y-2">
                       {availableUsers.map((user) => (
@@ -626,8 +633,8 @@ export default function ProjectsPage() {
                       ))}
                     </div>
                   </ScrollArea>
-                </div>
-              )}
+                )}
+              </div>
             </div>
           )}
         </DialogContent>
