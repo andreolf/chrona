@@ -33,9 +33,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useToast } from '@/hooks/use-toast';
 import { format, parseISO } from 'date-fns';
-import { Users, MoreHorizontal, UserCheck, UserX } from 'lucide-react';
+import { Users, MoreHorizontal, UserCheck, UserX, Briefcase, Shield } from 'lucide-react';
+
+type UserFilter = 'all' | 'freelancer' | 'admin';
 
 export default function UsersPage() {
   const router = useRouter();
@@ -43,6 +46,7 @@ export default function UsersPage() {
   const [users, setUsers] = useState<Profile[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [filter, setFilter] = useState<UserFilter>('all');
 
   const fetchData = useCallback(async () => {
     const supabase = createClient();
@@ -132,6 +136,15 @@ export default function UsersPage() {
       .slice(0, 2);
   };
 
+  // Filter users based on selected tab
+  const filteredUsers = users.filter(user => {
+    if (filter === 'all') return true;
+    return user.role === filter;
+  });
+
+  const freelancerCount = users.filter(u => u.role === 'freelancer').length;
+  const adminCount = users.filter(u => u.role === 'admin').length;
+
   return (
     <>
       <PageHeader
@@ -139,13 +152,46 @@ export default function UsersPage() {
         description="Manage users and their roles"
       />
 
+      {/* Filter Tabs */}
+      <Tabs value={filter} onValueChange={(v) => setFilter(v as UserFilter)} className="mb-6">
+        <TabsList className="bg-slate-800/50 border border-slate-700">
+          <TabsTrigger 
+            value="all" 
+            className="data-[state=active]:bg-slate-700 data-[state=active]:text-white"
+          >
+            <Users className="w-4 h-4 mr-2" />
+            All ({users.length})
+          </TabsTrigger>
+          <TabsTrigger 
+            value="freelancer" 
+            className="data-[state=active]:bg-indigo-600 data-[state=active]:text-white"
+          >
+            <Briefcase className="w-4 h-4 mr-2" />
+            Freelancers ({freelancerCount})
+          </TabsTrigger>
+          <TabsTrigger 
+            value="admin" 
+            className="data-[state=active]:bg-violet-600 data-[state=active]:text-white"
+          >
+            <Shield className="w-4 h-4 mr-2" />
+            Admins ({adminCount})
+          </TabsTrigger>
+        </TabsList>
+      </Tabs>
+
       {isLoading ? (
         <TableSkeleton rows={5} />
-      ) : users.length === 0 ? (
+      ) : filteredUsers.length === 0 ? (
         <EmptyState
-          icon={Users}
-          title="No team members"
-          description="Team members will appear here when they sign up"
+          icon={filter === 'freelancer' ? Briefcase : filter === 'admin' ? Shield : Users}
+          title={filter === 'all' ? 'No team members' : `No ${filter}s`}
+          description={
+            filter === 'freelancer' 
+              ? 'Freelancers will appear here when they sign up with the Freelancer role'
+              : filter === 'admin'
+              ? 'No other admins in your organization'
+              : 'Team members will appear here when they sign up'
+          }
         />
       ) : (
         <Card className="bg-slate-900/50 border-slate-800 animate-fade-in">
@@ -162,7 +208,7 @@ export default function UsersPage() {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {users.map((user) => (
+                {filteredUsers.map((user) => (
                   <TableRow
                     key={user.id}
                     className="border-slate-800 hover:bg-slate-800/30"
