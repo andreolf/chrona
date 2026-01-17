@@ -121,11 +121,11 @@ export default function SignupPage() {
       
       <Card className="w-full max-w-md relative bg-slate-900/90 border-slate-800 shadow-2xl shadow-indigo-500/10">
         <CardHeader className="text-center space-y-4">
-          <div className="flex justify-center">
-            <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30">
+          <Link href="/" className="flex justify-center">
+            <div className="w-14 h-14 bg-gradient-to-br from-indigo-500 to-violet-600 rounded-xl flex items-center justify-center shadow-lg shadow-indigo-500/30 hover:scale-105 transition-transform">
               <Clock className="w-7 h-7 text-white" />
             </div>
-          </div>
+          </Link>
           <div>
             <CardTitle className="text-2xl font-bold bg-gradient-to-r from-white to-slate-300 bg-clip-text text-transparent">
               Create your account
