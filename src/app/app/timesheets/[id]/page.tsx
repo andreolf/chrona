@@ -74,7 +74,7 @@ interface TimesheetDetails {
 }
 
 export default function TimesheetDetailPage() {
-  const params = useParams();
+  const params = useParams<{ id: string }>();
   const router = useRouter();
   const { toast } = useToast();
   const [timesheet, setTimesheet] = useState<TimesheetDetails | null>(null);
